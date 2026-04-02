@@ -1,0 +1,22 @@
+.navbar-dark {
+  background-color: #070F94;
+}
+
+.row-header{
+  margin:10 auto;
+  padding:10px;
+}
+
+.jumbotron {
+  padding:50px 10px 50px 10px;
+  margin:0px auto;
+  background: #727CFF ;
+  color:floralwhite;
+}
+
+#sidecol{
+  padding:50px 10px 50px 10px;
+  margin:10px auto;
+  min-height: 500px;
+  background: #B5B8E1
+}

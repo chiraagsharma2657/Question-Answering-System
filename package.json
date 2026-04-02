@@ -1,0 +1,24 @@
+{
+  "name": "question-answering-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run lite",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lite":"lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aashiverma/Question-Answering-System.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aashiverma/Question-Answering-System/issues"
+  },
+  "homepage": "https://github.com/aashiverma/Question-Answering-System#readme",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- scripts -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link href="../static/styles.css" rel="stylesheet" />
+    <!-- <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"> -->
+
+    <title>Question-Answering System</title>
+    
+  </head>
+  <body>
+    <!-- navigation bar -->
+    <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <div class="container">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#Navbar"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="Navbar">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#"> Home</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Feature 1</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Feature 2</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Feature 3</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- jumbotron -->
+    <header class="jumbotron">
+      <div class="container">
+        <div class="row row-header">
+          <div class="col-12 col-sm-12">
+            <h2>You can get answers to questions from a long paragraph.</h2>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4" id="sidecol">
+          <label for="modelchoice">Choose model type</label>
+          <select class="form-control col-4" id="modelchoice" onChange="cond(this)">
+            <option value="model1">BERT Large</option>
+            <option value="model2">BERT Base</option>
+          </select>
+
+          <div style="padding-top: 30px;">        
+            <label for="uploadchoice">Upload</label>
+            <select class="form-control col-12" id="uploadchoice" onChange= "checkOption(this)">
+              <option value="copy">Copy Paste Text</option>
+              <option value="upload">Upload Document</option>
+            </select>
+          </div>
+    
+          <div style="padding-top: 30px;" >        
+            <!-- <input class="form-control" type="file" id="formFileDisabled" > -->
+            <form method="post" action="/upload" enctype="multipart/form-data"  >
+              <input type="file" name="file" id="file_upload" style="display: none;"/>
+              <input type="submit" id="submit_btn" style="display: none;"/>
+          </form>
+          </div>
+        </div>
+
+        
+        <div class="col-md-8">
+          <form id="formId" method='POST' action="/model1" >
+            <div class="form-group row">
+              <label for="para" class="col-12 col-form-label"
+                >Enter your Comprehension</label
+              >
+              <div class="col-12">
+                <textarea
+                  class="form-control"
+                  id="para"
+                  name="para"
+                  rows="12" 
+                >{{para}}</textarea>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="ques" class="col-12 col-form-label"
+                >Enter your question</label
+              >
+              <div class="col-12">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ques"
+                  name="ques"
+                  placeholder="Enter question"
+                  value="{{ques}}"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-10">
+                <button type="submit" class="btn btn-primary" id="submitButton">
+                  Get answer
+                </button>
+              </div>
+            </div>
+
+            {% if ans %}
+              <div class="form-group row">
+                <label for="ans" class="col-12 col-form-label"
+                  >Answer is</label
+                > 
+                <div class="col-12">
+                  <p> {{ans}} </p>
+                </div>
+              </div> 
+            {% endif %}
+          </form>
+
+          
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script >
+      
+    function checkOption(obj) {
+      
+      document.getElementById("para").disabled = (obj.value == "upload")
+      // document.getElementById("formFileDisabled").disabled = !(obj.value == "upload")
+      document.getElementById("submit_btn").style.display=(obj.value == "copy")? 'none' : 'block';
+      document.getElementById("file_upload").style.display=(obj.value == "copy")? 'none' : 'block';
+      }
+
+    function cond(obj){
+      //document.getElementById('modelchoice').onchange = function(){
+      document.getElementById('formId').action = '/'+obj.value;
+    }
+    
+
+    </script>
+  </body>
+</html>

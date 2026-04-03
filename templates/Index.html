@@ -8,24 +8,25 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
-    <!-- scripts -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap"
+      rel="stylesheet"
+    />
     <link href="../static/styles.css" rel="stylesheet" />
-    <!-- <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"> -->
 
-    <title>Question-Answering System</title>
-    
+    <title>Question Answering System</title>
   </head>
   <body>
-    <!-- navigation bar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
-      <a class="navbar-brand" href="#">Navbar</a>
       <div class="container">
+        <a class="navbar-brand" href="#">QA System</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -35,109 +36,91 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="Navbar">
-          <ul class="navbar-nav mr-auto">
+          <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#"> Home</a>
+              <a class="nav-link" href="/">Home</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="#">Feature 1</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Feature 2</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Feature 3</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- jumbotron -->
-    <header class="jumbotron">
+    <!-- Hero -->
+    <header class="jumbotron" style="margin-top: 56px;">
       <div class="container">
-        <div class="row row-header">
-          <div class="col-12 col-sm-12">
-            <h2>You can get answers to questions from a long paragraph.</h2>
-          </div>
-        </div>
+        <h2>Get Instant Answers from Any Text</h2>
+        <p>Paste a paragraph or upload a PDF, ask a question, and let AI find the answer for you.</p>
       </div>
     </header>
 
-    <div class="container">
+    <!-- Main Content -->
+    <div class="container main-container">
       <div class="row">
-        <div class="col-md-4" id="sidecol">
-          <label for="modelchoice">Choose model type</label>
-          <select class="form-control col-4" id="modelchoice" onChange="cond(this)">
+        <!-- Sidebar -->
+        <div class="col-md-3" id="sidecol">
+          <label for="modelchoice">Model</label>
+          <select class="form-control" id="modelchoice" onChange="cond(this)">
             <option value="model1">BERT Large</option>
             <option value="model2">BERT Base</option>
           </select>
 
-          <div style="padding-top: 30px;">        
-            <label for="uploadchoice">Upload</label>
-            <select class="form-control col-12" id="uploadchoice" onChange= "checkOption(this)">
+          <div style="padding-top: 24px;">
+            <label for="uploadchoice">Input Method</label>
+            <select class="form-control" id="uploadchoice" onChange="checkOption(this)">
               <option value="copy">Copy Paste Text</option>
-              <option value="upload">Upload Document</option>
+              <option value="upload">Upload PDF</option>
             </select>
           </div>
-    
-          <div style="padding-top: 30px;" >        
-            <!-- <input class="form-control" type="file" id="formFileDisabled" > -->
-            <form method="post" action="/upload" enctype="multipart/form-data"  >
-              <input type="file" name="file" id="file_upload" style="display: none;"/>
-              <input type="submit" id="submit_btn" style="display: none;"/>
-          </form>
+
+          <div style="padding-top: 20px;">
+            <form method="post" action="/upload" enctype="multipart/form-data">
+              <input type="file" name="file" id="file_upload" style="display: none;" accept=".pdf"/>
+              <input type="submit" id="submit_btn" value="Upload" style="display: none;"/>
+            </form>
           </div>
         </div>
 
-        
-        <div class="col-md-8">
-          <form id="formId" method='POST' action="/model1" >
-            <div class="form-group row">
-              <label for="para" class="col-12 col-form-label"
-                >Enter your Comprehension</label
-              >
-              <div class="col-12">
+        <!-- Form -->
+        <div class="col-md-9">
+          <div class="form-card">
+            <form id="formId" method="POST" action="/model1">
+              <div class="form-group">
+                <label for="para">Enter your Comprehension</label>
                 <textarea
                   class="form-control"
                   id="para"
                   name="para"
-                  rows="12" 
+                  rows="10"
+                  placeholder="Paste your paragraph or passage here..."
                 >{{para}}</textarea>
               </div>
-            </div>
 
-            <div class="form-group row">
-              <label for="ques" class="col-12 col-form-label"
-                >Enter your question</label
-              >
-              <div class="col-12">
+              <div class="form-group">
+                <label for="ques">Ask a Question</label>
                 <input
                   type="text"
                   class="form-control"
                   id="ques"
                   name="ques"
-                  placeholder="Enter question"
+                  placeholder="Type your question here..."
                   value="{{ques}}"
                 />
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-md-10">
+              <div class="form-group">
                 <button type="submit" class="btn btn-primary" id="submitButton">
-                  Get answer
+                  Get Answer
                 </button>
               </div>
-            </div>
 
-            {% if ans %}
-              <div class="form-group row">
-                <label for="ans" class="col-12 col-form-label"
-                  >Answer is</label
-                > 
-                <div class="col-12">
-                  <p> {{ans}} </p>
-                </div>
-              </div> 
-            {% endif %}
-          </form>
-
-          
+              {% if ans %}
+              <div class="answer-box">
+                <label>Answer</label>
+                <p>{{ ans }}</p>
+              </div>
+              {% endif %}
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -157,23 +140,17 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
-    
-    <script >
-      
-    function checkOption(obj) {
-      
-      document.getElementById("para").disabled = (obj.value == "upload")
-      // document.getElementById("formFileDisabled").disabled = !(obj.value == "upload")
-      document.getElementById("submit_btn").style.display=(obj.value == "copy")? 'none' : 'block';
-      document.getElementById("file_upload").style.display=(obj.value == "copy")? 'none' : 'block';
+
+    <script>
+      function checkOption(obj) {
+        document.getElementById("para").disabled = (obj.value == "upload");
+        document.getElementById("submit_btn").style.display = (obj.value == "copy") ? 'none' : 'block';
+        document.getElementById("file_upload").style.display = (obj.value == "copy") ? 'none' : 'block';
       }
 
-    function cond(obj){
-      //document.getElementById('modelchoice').onchange = function(){
-      document.getElementById('formId').action = '/'+obj.value;
-    }
-    
-
+      function cond(obj) {
+        document.getElementById('formId').action = '/' + obj.value;
+      }
     </script>
   </body>
 </html>
